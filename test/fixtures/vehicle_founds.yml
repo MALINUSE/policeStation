@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  station_police_id: 
+  engin_id: 
+  color: MyString
+  description: MyText
+
+two:
+  station_police_id: 
+  engin_id: 
+  color: MyString
+  description: MyText
