@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160412225154) do
+ActiveRecord::Schema.define(version: 20160412231112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,20 @@ ActiveRecord::Schema.define(version: 20160412225154) do
   end
 
   add_index "communes", ["cercle_id"], name: "index_communes_on_cercle_id", using: :btree
+
+  create_table "declarations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "quartier_id"
+    t.integer  "engin_id"
+    t.string   "color"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "declarations", ["engin_id"], name: "index_declarations_on_engin_id", using: :btree
+  add_index "declarations", ["quartier_id"], name: "index_declarations_on_quartier_id", using: :btree
+  add_index "declarations", ["user_id"], name: "index_declarations_on_user_id", using: :btree
 
   create_table "engins", force: :cascade do |t|
     t.string   "name"
@@ -70,6 +84,28 @@ ActiveRecord::Schema.define(version: 20160412225154) do
 
   add_index "station_polices", ["commune_id"], name: "index_station_polices_on_commune_id", using: :btree
 
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
+    t.string   "username"
+    t.string   "nom"
+    t.string   "prenom"
+    t.string   "role"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
   create_table "vehicle_founds", force: :cascade do |t|
     t.integer  "station_police_id"
     t.integer  "engin_id"
@@ -84,6 +120,9 @@ ActiveRecord::Schema.define(version: 20160412225154) do
 
   add_foreign_key "cercles", "regions"
   add_foreign_key "communes", "cercles"
+  add_foreign_key "declarations", "engins"
+  add_foreign_key "declarations", "quartiers"
+  add_foreign_key "declarations", "users"
   add_foreign_key "quartiers", "communes"
   add_foreign_key "station_polices", "communes"
   add_foreign_key "vehicle_founds", "engins"
